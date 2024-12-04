@@ -1,7 +1,9 @@
 import { useSelector } from 'react-redux'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
+import '../styles/MapComponent.scss'
 
-const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY || ''
+// const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY || ''
+const googleMapsApiKey = 'AIzaSyBDBbqbjXB1eB_TjZIKhNynZkdGVgI3kgs'
 
 interface Vehicle {
   _id: string
@@ -19,7 +21,7 @@ const MapComponent = () => {
 
   const containerStyle = {
     width: '100%',
-    height: '400px',
+    height: '88vh',
   }
 
   const center = {
@@ -27,18 +29,33 @@ const MapComponent = () => {
     lng: -122.4194,
   }
 
+  // TEMP
+  const tempVehicle = {
+    _id: '1',
+    latitude: 37.7749,
+    longitude: -122.4194,
+    trackerName: 'Test Vehicle',
+  }
+
   return (
-    <LoadScript googleMapsApiKey={googleMapsApiKey}>
-      <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={8}>
-        {vehicles.map((vehicle: Vehicle) => (
+    <div className="map-container" style={{ width: '100%' }}>
+      <LoadScript googleMapsApiKey={googleMapsApiKey}>
+        <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={8}>
+          {/* {vehicles.map((vehicle: Vehicle) => (
           <Marker
             key={vehicle._id}
             position={{ lat: vehicle.latitude, lng: vehicle.longitude }}
             title={vehicle.trackerName}
           />
-        ))}
-      </GoogleMap>
-    </LoadScript>
+        ))} */}
+          <Marker
+            key={tempVehicle._id}
+            position={{ lat: tempVehicle.latitude, lng: tempVehicle.longitude }}
+            title={tempVehicle.trackerName}
+          />
+        </GoogleMap>
+      </LoadScript>
+    </div>
   )
 }
 

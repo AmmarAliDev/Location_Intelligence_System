@@ -1,16 +1,18 @@
+const cors = require('cors')
 const express = require('express')
-const vehicleRoutes = require('./routes/vehicleRoutes')
-const dbConnect = require('./config/db')
 require('dotenv').config()
 
-const app = express()
-app.use(express.json()) // Middleware to parse incoming JSON requests
+const dbConnect = require('./config/db')
+const vehicleRoutes = require('./routes/vehicleRoutes')
 
+const app = express()
 // Connect to MongoDB
 dbConnect()
 
+app.use('/api/vehicles', cors(), vehicleRoutes)
+
 // Routes
-app.use('/api/vehicles', vehicleRoutes)
+app.use(express.json()) // Middleware to parse incoming JSON requests
 
 // Start server
 const PORT = process.env.PORT || 5000

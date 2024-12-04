@@ -1,7 +1,7 @@
 // /src/components/VehicleList.js
 import { useSelector } from 'react-redux'
 
-import './VehicleList.scss'
+import '../styles/VehicleList.scss'
 import VehicleItem from './VehicleItem'
 
 interface Vehicle {

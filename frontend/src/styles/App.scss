@@ -1,10 +1,12 @@
 // /src/styles/App.scss
 .App {
   text-align: center;
+  width: 100vw;
 }
 
 .vehicle-map-container {
   display: flex;
   justify-content: space-between;
   padding: 20px;
+  height: 90vh;
 }
