@@ -106,4 +106,4 @@ node server.js
 
 ### Time Estimation for development
 
-It took around 12 to 13 hours to complete this project
+It took around 10 to 12 hours to complete this project
