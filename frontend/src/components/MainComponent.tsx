@@ -1,13 +1,24 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { setSelectedVehicle } from '../redux/selectedVehicleSlice'
+
 import MapComponent from './MapComponent'
 import Modal from './Modal'
 import VehicleList from './VehicleList'
 import VehicleForm from './VehicleForm'
 
+interface Vehicle {
+  _id: string
+  trackerId: number
+  carPlate: string
+  latitude: number
+  longitude: number
+  trackerName: string
+}
+
 const MainComponent = () => {
   const [open, setOpen] = useState(false)
-  const [selectedVehicle, setSelectedVehicle] = useState<any>(null)
-  console.log('selectedVehicle:', selectedVehicle)
+  const dispatch = useDispatch()
 
   return (
     <>
@@ -15,8 +26,12 @@ const MainComponent = () => {
         <VehicleForm setOpen={setOpen} />
       </Modal>
       <div className="vehicle-map-container">
-        <VehicleList setSelectedVehicle={setSelectedVehicle} />
-        <MapComponent selectedVehicle={selectedVehicle} setOpen={setOpen} />
+        <VehicleList
+          setSelectedVehicle={(vehicle: Vehicle) =>
+            dispatch(setSelectedVehicle(vehicle))
+          }
+        />
+        <MapComponent setOpen={setOpen} />
       </div>
     </>
   )

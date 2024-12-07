@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import '../styles/VehicleList.scss'
 import VehicleItem from './VehicleItem'
@@ -18,6 +18,7 @@ interface RootState {
 }
 
 const VehicleList = ({ setSelectedVehicle }: any) => {
+  const dispatch = useDispatch()
   const vehicles = useSelector((state: RootState) => state.vehicles)
   const [searchTerm, setSearchTerm] = useState('')
 
@@ -43,7 +44,7 @@ const VehicleList = ({ setSelectedVehicle }: any) => {
           <VehicleItem
             key={vehicle.carPlate}
             vehicle={vehicle}
-            setSelectedVehicle={setSelectedVehicle}
+            setSelectedVehicle={() => dispatch(setSelectedVehicle(vehicle))}
           />
         ))}
       </ul>

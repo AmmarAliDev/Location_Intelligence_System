@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { GoogleMap, LoadScript } from '@react-google-maps/api'
 import '../styles/MapComponent.scss'
 import VehicleDetailsPopup from './VehicleDetailsPopup'
@@ -20,21 +20,24 @@ interface Vehicle {
 
 interface RootState {
   vehicles: Vehicle[]
+  selectedVehicle: {
+    selectedVehicle: Vehicle
+  }
 }
 
-const MapComponent = ({
-  selectedVehicle,
-  setOpen,
-}: {
-  selectedVehicle: Vehicle
-  setOpen: (value: boolean) => void
-}) => {
+const MapComponent = ({ setOpen }: { setOpen: (value: boolean) => void }) => {
+  const selectedVehicle = useSelector(
+    (state: RootState) => state.selectedVehicle.selectedVehicle
+  )
   console.log('selectedVehicle:????????????', selectedVehicle)
 
   const [address, setAddress] = useState<string>('')
   const mapRef = useRef<google.maps.Map | null>(null)
   const [popupOpen, setPopupOpen] = useState(true)
-  const [center, setCenter] = useState({ lat: 24.8607, lng: 67.0011 })
+  const [center, setCenter] = useState({
+    lat: 25.257384765884733,
+    lng: 55.35874203877398,
+  })
 
   useEffect(() => {
     const getAddress = async () => {
