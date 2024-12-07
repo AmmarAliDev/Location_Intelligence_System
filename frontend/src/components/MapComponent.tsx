@@ -7,7 +7,9 @@ import { fetchLocation } from '../services/mapService'
 
 const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 const mapId = import.meta.env.VITE_GOOGLE_MAPS_ID
-console.log('googleMapsId:', mapId)
+
+// Default center when no vehicle is selected
+const DEFAULT_CENTER = { lat: 25.257384765884733, lng: 55.35874203877398 }
 
 interface Vehicle {
   _id: string
@@ -21,7 +23,7 @@ interface Vehicle {
 interface RootState {
   vehicles: Vehicle[]
   selectedVehicle: {
-    selectedVehicle: Vehicle
+    selectedVehicle: Vehicle | null
   }
 }
 
@@ -34,57 +36,63 @@ const MapComponent = ({ setOpen }: { setOpen: (value: boolean) => void }) => {
   const [address, setAddress] = useState<string>('')
   const mapRef = useRef<google.maps.Map | null>(null)
   const [popupOpen, setPopupOpen] = useState(true)
-  const [center, setCenter] = useState({
-    lat: 25.257384765884733,
-    lng: 55.35874203877398,
-  })
-
-  useEffect(() => {
-    const getAddress = async () => {
-      const address = await fetchLocation(
-        selectedVehicle?.latitude,
-        selectedVehicle?.longitude
-      )
-      setAddress(address || 'Location not found')
-    }
-    getAddress()
-  }, [selectedVehicle])
-
-  useEffect(() => {
-    if (mapRef.current) {
-      const marker = new google.maps.marker.AdvancedMarkerElement({
-        position: {
-          lat: selectedVehicle?.latitude,
-          lng: selectedVehicle?.longitude,
-        },
-        map: mapRef.current,
-        title: selectedVehicle?.trackerName,
-      })
-
-      marker.addListener('click', () => {
-        // setAddress(selectedVehicle?.trackerName)
-      })
-    }
-  }, [selectedVehicle])
+  const [center, setCenter] = useState(DEFAULT_CENTER)
 
   useEffect(() => {
     if (selectedVehicle) {
+      // Fetch address for selected vehicle
+      const getAddress = async () => {
+        const fetchedAddress = await fetchLocation(
+          selectedVehicle.latitude,
+          selectedVehicle.longitude
+        )
+        setAddress(fetchedAddress || 'Location not found')
+      }
+      getAddress()
+
+      // Update the map center and open the popup when a vehicle is selected
       setCenter({
         lat: selectedVehicle.latitude,
         lng: selectedVehicle.longitude,
       })
       setPopupOpen(true)
+
+      // Set marker for selected vehicle
+      if (mapRef.current) {
+        const marker = new google.maps.Marker({
+          position: {
+            lat: selectedVehicle.latitude,
+            lng: selectedVehicle.longitude,
+          },
+          map: mapRef.current,
+          title: selectedVehicle.trackerName,
+        })
+
+        marker.addListener('click', () => {
+          // Logic for marker click (e.g., open vehicle details)
+        })
+
+        return () => {
+          // Clean up the marker when vehicle is deselected or component unmounts
+          marker.setMap(null)
+        }
+      }
+    } else {
+      // If no vehicle is selected, reset the address and center the map to default
+      setAddress('')
+      setCenter(DEFAULT_CENTER)
+      setPopupOpen(false)
     }
   }, [selectedVehicle])
 
   const containerStyle = {
     width: '100%',
-    height: '88vh',
+    height: '100%',
   }
 
   return (
     <div className="map-container" style={{ width: '100%' }}>
-      {popupOpen && (
+      {popupOpen && selectedVehicle && (
         <VehicleDetailsPopup
           vehicle={selectedVehicle}
           address={address}
@@ -103,9 +111,7 @@ const MapComponent = ({ setOpen }: { setOpen: (value: boolean) => void }) => {
             mapRef.current = map
           }}
           options={{ mapId }}
-        >
-          {/* Markers are added via useEffect */}
-        </GoogleMap>
+        ></GoogleMap>
       </LoadScript>
     </div>
   )

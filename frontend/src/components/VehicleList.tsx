@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import '../styles/VehicleList.scss'
 import VehicleItem from './VehicleItem'
@@ -15,12 +15,17 @@ interface Vehicle {
 
 interface RootState {
   vehicles: Vehicle[]
+  selectedVehicle: {
+    selectedVehicle: Vehicle | null
+  }
 }
 
-const VehicleList = ({ setSelectedVehicle }: any) => {
-  const dispatch = useDispatch()
+const VehicleList = () => {
   const vehicles = useSelector((state: RootState) => state.vehicles)
   const [searchTerm, setSearchTerm] = useState('')
+  const { selectedVehicle } = useSelector(
+    (state: RootState) => state.selectedVehicle
+  )
 
   const filteredVehicles = vehicles.filter(
     (vehicle) =>
@@ -33,20 +38,27 @@ const VehicleList = ({ setSelectedVehicle }: any) => {
 
   return (
     <div className="vehicle-list">
-      <input
-        type="text"
-        placeholder="Search"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
+      <div className="class-list-input-container">
+        <input
+          type="text"
+          placeholder="Search"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
       <ul>
-        {filteredVehicles.map((vehicle: Vehicle) => (
+        {selectedVehicle && (
           <VehicleItem
-            key={vehicle.carPlate}
-            vehicle={vehicle}
-            setSelectedVehicle={() => dispatch(setSelectedVehicle(vehicle))}
+            key={selectedVehicle.carPlate}
+            vehicle={selectedVehicle}
+            styles={{ backgroundColor: '#f5f7f8' }}
           />
-        ))}
+        )}
+        {filteredVehicles
+          .filter((vehicle) => vehicle._id !== selectedVehicle?._id)
+          .map((vehicle: Vehicle) => (
+            <VehicleItem key={vehicle.carPlate} vehicle={vehicle} />
+          ))}
       </ul>
     </div>
   )

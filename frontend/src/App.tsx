@@ -17,7 +17,7 @@ function App() {
   }, [dispatch])
   return (
     <div className="App">
-      <h1>Location Intelligence System</h1>
+      {/* <h1>Location Intelligence System</h1> */}
       {/* <VehicleForm /> */}
       <MainComponent />
     </div>

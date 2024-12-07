@@ -1,3 +1,5 @@
+import { useDispatch } from 'react-redux'
+import { setSelectedVehicle } from '../redux/selectedVehicleSlice'
 interface Vehicle {
   _id: string
   trackerId: number
@@ -9,18 +11,18 @@ interface Vehicle {
 
 const VehicleItem = ({
   vehicle,
-  setSelectedVehicle,
+  styles,
 }: {
   vehicle: Vehicle
-  setSelectedVehicle: any
+  styles?: any
 }) => {
+  const dispatch = useDispatch()
   return (
     <li
       className="vehicle-item"
+      style={styles}
       onClick={() => {
-        console.log('vehicle:', vehicle)
-
-        setSelectedVehicle(vehicle)
+        dispatch(setSelectedVehicle(vehicle))
       }}
     >
       <span>{vehicle.trackerName}</span> <span>{vehicle.carPlate}</span>

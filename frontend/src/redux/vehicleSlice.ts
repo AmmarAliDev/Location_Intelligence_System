@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 interface VehicleData {
   trackerId: string
   carPlate: string
@@ -32,14 +32,25 @@ export const addVehicle = createAsyncThunk(
   }
 )
 
+const initialState: VehicleData[] = []
+
 const vehiclesSlice = createSlice({
   name: 'vehicles',
-  initialState: [],
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchVehicles.fulfilled, (state, action) => {
-      return action.payload
-    })
+    builder.addCase(
+      fetchVehicles.fulfilled,
+      (state, action: PayloadAction<VehicleData[]>) => {
+        return action.payload
+      }
+    )
+    builder.addCase(
+      addVehicle.fulfilled,
+      (state, action: PayloadAction<VehicleData>) => {
+        state.push(action.payload)
+      }
+    )
   },
 })
 
