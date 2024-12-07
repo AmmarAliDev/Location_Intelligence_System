@@ -25,8 +25,6 @@ const VehicleDetailsPopup = ({
       </button>
       <h5>{vehicle?.trackerName}</h5>
       <p>{address}</p>
-      {/* <p>Latitude: {vehicle.latitude}</p>
-      <p>Longitude: {vehicle.longitude}</p> */}
     </div>
   )
 }

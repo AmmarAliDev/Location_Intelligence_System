@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
+
 interface VehicleData {
   trackerId: string
   carPlate: string
@@ -25,9 +26,15 @@ export const addVehicle = createAsyncThunk(
     try {
       const response = await axios.post(`${apiUrl}/api/vehicles`, vehicleData)
       return response.data
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error adding vehicle:', error)
-      throw new Error('Error adding vehicle')
+      throw new Error(
+        `Error: ${
+          error?.response
+            ? error?.response?.data?.message
+            : 'Something went wrong!'
+        }`
+      )
     }
   }
 )
@@ -42,6 +49,7 @@ const vehiclesSlice = createSlice({
     builder.addCase(
       fetchVehicles.fulfilled,
       (state, action: PayloadAction<VehicleData[]>) => {
+        console.log(state)
         return action.payload
       }
     )

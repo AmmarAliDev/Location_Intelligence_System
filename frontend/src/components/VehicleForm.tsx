@@ -1,7 +1,9 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react'
 import { useDispatch } from 'react-redux'
-import '../styles/VehicleForm.scss'
+import React, { useState, ChangeEvent, FormEvent } from 'react'
+
 import { addVehicle } from '../redux/vehicleSlice'
+
+import '../styles/VehicleForm.scss'
 
 interface FormData {
   trackerId: string
@@ -16,6 +18,7 @@ interface FormErrors {
   carPlate?: string
   latitude?: string
   longitude?: string
+  submit?: string
 }
 
 interface VehicleFormProps {
@@ -72,7 +75,7 @@ const VehicleForm: React.FC<VehicleFormProps> = ({ setOpen }) => {
     // Submit form if valid
     try {
       const response = await dispatch(addVehicle(formData) as any) // Use `as any` to bypass type mismatch
-      console.log('Vehicle added:', response)
+      console.log('Response:', response)
 
       // Reset form data
       setFormData({
@@ -85,7 +88,10 @@ const VehicleForm: React.FC<VehicleFormProps> = ({ setOpen }) => {
       if (response?.payload) {
         setOpen(false)
       }
-    } catch (error) {
+      if (response?.error) {
+        setErrors({ submit: response.error.message })
+      }
+    } catch (error: any) {
       console.error('Error adding vehicle:', error)
     }
   }
@@ -155,6 +161,11 @@ const VehicleForm: React.FC<VehicleFormProps> = ({ setOpen }) => {
         <button type="submit" className="submit-button">
           Add Vehicle
         </button>
+
+        <div className="form-group">
+          {errors.submit && <span className="error">{errors.submit}</span>}
+          {/* <span className="error">{errors.submit}</span> */}
+        </div>
       </form>
     </div>
   )

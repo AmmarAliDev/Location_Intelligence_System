@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import '../styles/VehicleList.scss'
 import VehicleItem from './VehicleItem'
+
+import '../styles/VehicleList.scss'
 
 interface Vehicle {
   _id: string

@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
+
 import vehiclesReducer from './vehicleSlice'
 import selectedVehicleReducer from './selectedVehicleSlice'
 

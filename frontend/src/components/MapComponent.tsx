@@ -1,12 +1,16 @@
+import { useSelector } from 'react-redux'
 import { useEffect, useState, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { GoogleMap, LoadScript } from '@react-google-maps/api'
-import '../styles/MapComponent.scss'
-import VehicleDetailsPopup from './VehicleDetailsPopup'
+
 import { fetchLocation } from '../services/mapService'
+import VehicleDetailsPopup from './VehicleDetailsPopup'
+
+import '../styles/MapComponent.scss'
 
 const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 const mapId = import.meta.env.VITE_GOOGLE_MAPS_ID
+
+const libraries = ['marker']
 
 // Default center when no vehicle is selected
 const DEFAULT_CENTER = { lat: 25.257384765884733, lng: 55.35874203877398 }
@@ -31,7 +35,6 @@ const MapComponent = ({ setOpen }: { setOpen: (value: boolean) => void }) => {
   const selectedVehicle = useSelector(
     (state: RootState) => state.selectedVehicle.selectedVehicle
   )
-  console.log('selectedVehicle:????????????', selectedVehicle)
 
   const [address, setAddress] = useState<string>('')
   const mapRef = useRef<google.maps.Map | null>(null)
@@ -50,14 +53,11 @@ const MapComponent = ({ setOpen }: { setOpen: (value: boolean) => void }) => {
       }
       getAddress()
 
-      // Update the map center and open the popup when a vehicle is selected
       setCenter({
         lat: selectedVehicle.latitude,
         lng: selectedVehicle.longitude,
       })
-      setPopupOpen(true)
 
-      // Set marker for selected vehicle
       if (mapRef.current) {
         const marker = new google.maps.Marker({
           position: {
@@ -69,16 +69,14 @@ const MapComponent = ({ setOpen }: { setOpen: (value: boolean) => void }) => {
         })
 
         marker.addListener('click', () => {
-          // Logic for marker click (e.g., open vehicle details)
+          setPopupOpen(true)
         })
 
         return () => {
-          // Clean up the marker when vehicle is deselected or component unmounts
           marker.setMap(null)
         }
       }
     } else {
-      // If no vehicle is selected, reset the address and center the map to default
       setAddress('')
       setCenter(DEFAULT_CENTER)
       setPopupOpen(false)
@@ -102,7 +100,7 @@ const MapComponent = ({ setOpen }: { setOpen: (value: boolean) => void }) => {
       <div className="edit-container" onClick={() => setOpen(true)}>
         <img src="/edit-icon.svg" alt="" />
       </div>
-      <LoadScript googleMapsApiKey={googleMapsApiKey} libraries={['marker']}>
+      <LoadScript googleMapsApiKey={googleMapsApiKey}>
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={center}

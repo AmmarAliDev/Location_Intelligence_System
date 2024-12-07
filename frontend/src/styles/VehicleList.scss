@@ -1,8 +1,5 @@
-// /src/styles/VehicleList.scss
 .vehicle-list {
   width: 30%;
-  // margin-top: 20px;
-  // padding: 10px;
   background-color: #fff;
   color: #808080;
 
@@ -42,5 +39,8 @@
 
   &:hover {
     font-weight: bold;
+  }
+  @media (max-width: 1100px) {
+    flex-direction: column;
   }
 }
