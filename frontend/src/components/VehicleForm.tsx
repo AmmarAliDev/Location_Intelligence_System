@@ -1,7 +1,5 @@
-// /src/components/VehicleForm.tsx
 import React, { useState, ChangeEvent, FormEvent } from 'react'
 import { useDispatch } from 'react-redux'
-
 import '../styles/VehicleForm.scss'
 import { addVehicle } from '../redux/vehicleSlice'
 
@@ -18,7 +16,6 @@ interface FormErrors {
   carPlate?: string
   latitude?: string
   longitude?: string
-  trackerName?: string
 }
 
 interface VehicleFormProps {
@@ -33,7 +30,7 @@ const VehicleForm: React.FC<VehicleFormProps> = ({ setOpen }) => {
     carPlate: '',
     latitude: '',
     longitude: '',
-    trackerName: '',
+    trackerName: '', // Ensure trackerName is always a string
   })
 
   const [errors, setErrors] = useState<FormErrors>({})
@@ -66,10 +63,6 @@ const VehicleForm: React.FC<VehicleFormProps> = ({ setOpen }) => {
       newErrors.longitude = 'Longitude must be a valid number.'
       isValid = false
     }
-    // if (!formData.trackerName) {
-    //   newErrors.trackerName = 'Tracker Name is required.'
-    //   isValid = false
-    // }
 
     if (!isValid) {
       setErrors(newErrors)
@@ -78,10 +71,10 @@ const VehicleForm: React.FC<VehicleFormProps> = ({ setOpen }) => {
 
     // Submit form if valid
     try {
-      const response = await dispatch(addVehicle(formData) as any) // Use `as any` to bypass type mismatch with
+      const response = await dispatch(addVehicle(formData) as any) // Use `as any` to bypass type mismatch
       console.log('Vehicle added:', response)
 
-      // Thunk actions
+      // Reset form data
       setFormData({
         trackerId: '',
         carPlate: '',
@@ -150,16 +143,13 @@ const VehicleForm: React.FC<VehicleFormProps> = ({ setOpen }) => {
         </div>
 
         <div className="form-group">
-          <label>Tracker Name</label>
+          <label>Tracker Name (Optional)</label>
           <input
             type="text"
             name="trackerName"
             value={formData.trackerName}
             onChange={handleChange}
           />
-          {errors.trackerName && (
-            <span className="error">{errors.trackerName}</span>
-          )}
         </div>
 
         <button type="submit" className="submit-button">

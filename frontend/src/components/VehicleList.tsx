@@ -10,7 +10,7 @@ interface Vehicle {
   carPlate: string
   latitude: number
   longitude: number
-  trackerName: string
+  trackerName?: string
 }
 
 interface RootState {
@@ -23,7 +23,9 @@ const VehicleList = ({ setSelectedVehicle }: any) => {
 
   const filteredVehicles = vehicles.filter(
     (vehicle) =>
-      vehicle.trackerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (vehicle.trackerName ?? '')
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
       vehicle.carPlate.toLowerCase().includes(searchTerm.toLowerCase()) ||
       vehicle.trackerId.toString().includes(searchTerm)
   )

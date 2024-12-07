@@ -1,10 +1,12 @@
 import '../styles/VehicleDetailsPopup.scss'
 
 interface Vehicle {
-  trackerName: string
+  _id: string
+  trackerId: number
   carPlate: string
   latitude: number
   longitude: number
+  trackerName?: string
 }
 
 const VehicleDetailsPopup = ({

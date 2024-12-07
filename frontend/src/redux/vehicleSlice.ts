@@ -1,6 +1,5 @@
 import axios from 'axios'
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
-
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 interface VehicleData {
   trackerId: string
   carPlate: string
@@ -9,13 +8,7 @@ interface VehicleData {
   trackerName: string
 }
 
-interface VehicleState {
-  vehicles: VehicleData[]
-  selectedVehicle: VehicleData | null
-}
-
-// const apiUrl = process.env.API_URL
-const apiUrl = import.meta.env.BASE_URL
+const apiUrl = import.meta.env.VITE_API_HOST
 
 export const fetchVehicles = createAsyncThunk(
   'vehicles/fetchVehicles',
@@ -39,25 +32,15 @@ export const addVehicle = createAsyncThunk(
   }
 )
 
-const initialState: VehicleState = {
-  vehicles: [],
-  selectedVehicle: null,
-}
-
 const vehiclesSlice = createSlice({
   name: 'vehicles',
-  initialState,
-  reducers: {
-    setSelectedVehicle(state, action: PayloadAction<VehicleData>) {
-      state.selectedVehicle = action.payload
-    },
-  },
+  initialState: [],
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchVehicles.fulfilled, (state, action) => {
-      state.vehicles = action.payload
+      return action.payload
     })
   },
 })
 
-export const { setSelectedVehicle } = vehiclesSlice.actions
 export default vehiclesSlice.reducer

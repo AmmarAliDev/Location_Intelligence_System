@@ -1,7 +1,7 @@
 interface Vehicle {
   _id: string
   trackerId: number
-  trackerName: string
+  trackerName?: string
   carPlate: string
   latitude: number
   longitude: number
