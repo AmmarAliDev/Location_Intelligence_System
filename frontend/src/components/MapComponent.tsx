@@ -10,8 +10,6 @@ import '../styles/MapComponent.scss'
 const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 const mapId = import.meta.env.VITE_GOOGLE_MAPS_ID
 
-const libraries = ['marker']
-
 // Default center when no vehicle is selected
 const DEFAULT_CENTER = { lat: 25.257384765884733, lng: 55.35874203877398 }
 
