@@ -6,6 +6,7 @@ import VehicleList from './components/VehicleList'
 import MapComponent from './components/MapComponent'
 import { fetchVehicles } from './redux/vehicleSlice'
 import VehicleForm from './components/VehicleForm'
+import MainComponent from './components/MainComponent'
 
 function App() {
   const dispatch: any = useDispatch()
@@ -17,11 +18,8 @@ function App() {
   return (
     <div className="App">
       <h1>Location Intelligence System</h1>
-      <VehicleForm />
-      <div className="vehicle-map-container">
-        <VehicleList />
-        <MapComponent />
-      </div>
+      {/* <VehicleForm /> */}
+      <MainComponent />
     </div>
   )
 }

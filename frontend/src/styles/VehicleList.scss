@@ -4,11 +4,25 @@
   margin-top: 20px;
   padding: 10px;
   background-color: #f0f0f0;
+  color: #808080;
+
+  input {
+    background-color: #f0f0f0;
+    border: 1px solid rgb(216, 214, 214);
+    border-radius: 4px;
+    outline: none;
+    color: #383838;
+    padding: 10px;
+    width: 80%;
+  }
 }
 
 .vehicle-item {
+  display: flex;
+  gap: 10px;
   margin-bottom: 10px;
   font-size: 16px;
+  text-align: start;
   cursor: pointer;
   &:hover {
     text-decoration: underline;

@@ -1,18 +1,33 @@
-const cors = require('cors')
 const express = require('express')
-require('dotenv').config()
-
-const dbConnect = require('./config/db')
+const cors = require('cors')
 const vehicleRoutes = require('./routes/vehicleRoutes')
+const dbConnect = require('./config/db') // Assuming you have a dbConnect function
 
-const app = express()
 // Connect to MongoDB
 dbConnect()
 
-app.use('/api/vehicles', cors(), vehicleRoutes)
+const app = express()
+
+// Request logging middleware
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`)
+  next()
+})
+
+// Middleware to parse incoming JSON requests
+app.use(express.json())
+
+// Use CORS middleware
+app.use(cors())
 
 // Routes
-app.use(express.json()) // Middleware to parse incoming JSON requests
+app.use('/api/vehicles', vehicleRoutes)
+
+// Global error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack)
+  res.status(500).json({ message: 'Server Error', error: err.message })
+})
 
 // Start server
 const PORT = process.env.PORT || 5000

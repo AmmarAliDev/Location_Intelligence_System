@@ -21,7 +21,11 @@ interface FormErrors {
   trackerName?: string
 }
 
-const VehicleForm: React.FC = () => {
+interface VehicleFormProps {
+  setOpen: (value: boolean) => void
+}
+
+const VehicleForm: React.FC<VehicleFormProps> = ({ setOpen }) => {
   const dispatch = useDispatch()
 
   const [formData, setFormData] = useState<FormData>({
@@ -62,10 +66,10 @@ const VehicleForm: React.FC = () => {
       newErrors.longitude = 'Longitude must be a valid number.'
       isValid = false
     }
-    if (!formData.trackerName) {
-      newErrors.trackerName = 'Tracker Name is required.'
-      isValid = false
-    }
+    // if (!formData.trackerName) {
+    //   newErrors.trackerName = 'Tracker Name is required.'
+    //   isValid = false
+    // }
 
     if (!isValid) {
       setErrors(newErrors)
@@ -74,7 +78,10 @@ const VehicleForm: React.FC = () => {
 
     // Submit form if valid
     try {
-      await dispatch(addVehicle(formData) as any) // Use `as any` to bypass type mismatch with Thunk actions
+      const response = await dispatch(addVehicle(formData) as any) // Use `as any` to bypass type mismatch with
+      console.log('Vehicle added:', response)
+
+      // Thunk actions
       setFormData({
         trackerId: '',
         carPlate: '',
@@ -82,6 +89,9 @@ const VehicleForm: React.FC = () => {
         longitude: '',
         trackerName: '',
       })
+      if (response?.payload) {
+        setOpen(false)
+      }
     } catch (error) {
       console.error('Error adding vehicle:', error)
     }

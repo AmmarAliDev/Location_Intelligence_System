@@ -8,6 +8,7 @@ const router = express.Router()
 router.post('/', async (req, res) => {
   try {
     const { trackerId, carPlate, latitude, longitude, trackerName } = req.body
+    console.log('=================>', req.body)
 
     // Check if the tracker ID already exists
     const existingVehicle = await Vehicle.findOne({ trackerId })
@@ -28,7 +29,7 @@ router.post('/', async (req, res) => {
       carPlate,
       latitude,
       longitude,
-      trackerName,
+      trackerName: trackerName || '',
     })
     await vehicle.save()
     res.status(201).json(vehicle)

@@ -5,7 +5,7 @@ const vehicleSchema = new mongoose.Schema({
   carPlate: { type: String, required: true, unique: true },
   latitude: { type: Number, required: true },
   longitude: { type: Number, required: true },
-  trackerName: { type: String, required: true },
+  trackerName: { type: String, required: false },
 })
 
 module.exports = mongoose.model('Vehicle', vehicleSchema)

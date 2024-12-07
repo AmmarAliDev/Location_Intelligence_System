@@ -1,8 +1,21 @@
 import axios from 'axios'
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
+
+interface VehicleData {
+  trackerId: string
+  carPlate: string
+  latitude: string
+  longitude: string
+  trackerName: string
+}
+
+interface VehicleState {
+  vehicles: VehicleData[]
+  selectedVehicle: VehicleData | null
+}
 
 // const apiUrl = process.env.API_URL
-const apiUrl = 'http://localhost:5000'
+const apiUrl = import.meta.env.BASE_URL
 
 export const fetchVehicles = createAsyncThunk(
   'vehicles/fetchVehicles',
@@ -15,7 +28,7 @@ export const fetchVehicles = createAsyncThunk(
 // Add vehicle action
 export const addVehicle = createAsyncThunk(
   'vehicles/addVehicle',
-  async (vehicleData) => {
+  async (vehicleData: VehicleData) => {
     try {
       const response = await axios.post(`${apiUrl}/api/vehicles`, vehicleData)
       return response.data
@@ -26,15 +39,25 @@ export const addVehicle = createAsyncThunk(
   }
 )
 
+const initialState: VehicleState = {
+  vehicles: [],
+  selectedVehicle: null,
+}
+
 const vehiclesSlice = createSlice({
   name: 'vehicles',
-  initialState: [],
-  reducers: {},
+  initialState,
+  reducers: {
+    setSelectedVehicle(state, action: PayloadAction<VehicleData>) {
+      state.selectedVehicle = action.payload
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchVehicles.fulfilled, (state, action) => {
-      return action.payload
+      state.vehicles = action.payload
     })
   },
 })
 
+export const { setSelectedVehicle } = vehiclesSlice.actions
 export default vehiclesSlice.reducer
