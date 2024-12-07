@@ -38,9 +38,15 @@ npm i
 
 Create a .env file in the root of the frontend folder and paste below variables
 
+```sh
 VITE_API_HOST = http://localhost:5000
+```
+```sh
 VITE_GOOGLE_MAPS_API_KEY = AIzaSyBDBbqbjXB1eB_TjZIKhNynZkdGVgI3kgs
+```
+```sh
 VITE_GOOGLE_MAPS_ID = 9ee7c2051631b40e
+```
 
 ### Step 6: Run the Application
 
