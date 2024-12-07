@@ -88,8 +88,13 @@ npm i
 
 Create a .env file in the root of the backend folder and paste below variables
 
+```sh
 DB_URI=mongodb+srv://ammarali:sAWqf9B8uegSiQiJ@cluster0.polp1.mongodb.net/
+```
+
+```sh
 PORT=5000
+```
 
 ### Step 5: Run the Application
 
